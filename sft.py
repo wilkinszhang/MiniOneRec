@@ -104,29 +104,19 @@ def train(
     micro_batch_size: int = 4,
     num_epochs: int = 10,
     learning_rate: float = 3e-4,
-    cutoff_len: int = 2048,
+    cutoff_len: int = 512,
     # llm hyperparams
-    train_on_inputs: bool = True,  # if False, masks out inputs in loss
     group_by_length: bool = False,  # faster, but produces an odd training loss curve
     # wandb params
     wandb_project: str = "",
     wandb_run_name: str = "",
-    wandb_watch: str = "",  # options: false | gradients | all
-    wandb_log_model: str = "",  # options: false | true
     resume_from_checkpoint: str = None,  # either training checkpoint or final adapter
-    
-    local_rank: int = 0,
-    deepspeed: str ="",
     category: str="",
-    K: int = 0,
-    version: str = "base",
     train_from_scratch: bool = False,
     sid_index_path: str = "",
     item_meta_path: str = "",
-    user_preference_file: str = ""
 ):
     set_seed(seed)
-    os.environ['WANDB_MODE'] = 'disabled'
     os.environ['WANDB_PROJECT'] = wandb_project
     category_dict = {"Industrial_and_Scientific": "industrial and scientific items", "Office_Products": "office products", "Toys_and_Games": "toys and games", "Sports": "sports and outdoors", "Books": "books"}
     print(category)
@@ -158,7 +148,6 @@ def train(
     tokenizer.pad_token_id = tokenizer.eos_token_id
     tokenizer.padding_side = "left"
     
-    # 如果提供了sid_index_path，扩展tokenizer
     if sid_index_path and os.path.exists(sid_index_path):
         print(f"Loading index from {sid_index_path}")
         token_extender = TokenExtender(
@@ -169,8 +158,8 @@ def train(
         if new_tokens:
             print(f"Adding {len(new_tokens)} new tokens to tokenizer")
             tokenizer.add_tokens(new_tokens)
-            # 调整模型的embedding层大小
             model.resize_token_embeddings(len(tokenizer))
+
     train_datasets = []
     # train_data1 = SFTData(train_file=train_file, tokenizer=tokenizer, max_len=cutoff_len,  sample=sample, seed=seed, category=category)
     train_data1 = SidSFTDataset(train_file=train_file, tokenizer=tokenizer, max_len=cutoff_len,  sample=sample, seed=seed, category=category)
@@ -181,13 +170,8 @@ def train(
     train_datasets.append(train_data3)
     train_data4 = SFTData(train_file=train_file, tokenizer=tokenizer, max_len=cutoff_len,  sample=sample, seed=seed, category=category)
     train_datasets.append(train_data4)
-    # Add new TitleHistory2SidSFTDataset
-    # train_data5 = TitleHistory2SidSFTDataset(train_file=train_file, item_file=item_meta_path, index_file=sid_index_path, tokenizer=tokenizer, max_len=cutoff_len, sample=sample, seed=seed, category=category)
-    # train_datasets.append(train_data5)
-    # train_data4 = PreferenceSFTDataset(user_preference_file=user_preference_file, index_file=sid_index_path, tokenizer=tokenizer, max_len=cutoff_len, sample=sample, seed=seed, category=category)
-    # train_datasets.append(train_data4)
-    # train_data5 = UserPreference2sidSFTDataset(user_preference_file=user_preference_file, index_file=sid_index_path, tokenizer=tokenizer, max_len=cutoff_len, sample=10000, seed=seed, category=category)
-    # train_datasets.append(train_data5)
+    train_data5 = TitleHistory2SidSFTDataset(train_file=train_file, item_file=item_meta_path, index_file=sid_index_path, tokenizer=tokenizer, max_len=cutoff_len, sample=sample, seed=seed, category=category)
+    train_datasets.append(train_data5)
     train_data = ConcatDataset(train_datasets)
     val_data = SidSFTDataset(train_file=eval_file, tokenizer=tokenizer, max_len=cutoff_len,  sample=sample, seed=seed, category=category)
     # val_data = SFTData(train_file=eval_file, tokenizer=tokenizer, max_len=cutoff_len,  sample=20000, seed=seed, category=category)

@@ -7,7 +7,7 @@ from data import D3Dataset, SidDataset, RLTitle2SidDataset, RLSeqTitle2SidDatase
 from torch.utils.data import ConcatDataset
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import os
-from rere_trainer import ReReTrainer
+from minionerec_trainer import ReReTrainer
 from sasrec import SASRec
 from fire import Fire
 import pickle
@@ -60,8 +60,6 @@ def train(
     sample_train: bool = False,
     ada_path: str = "",
     cf_path: str = "",
-    sid_index_path: str = "",
-    item_meta_path: str = "",
     dapo: bool = False,
     gspo: bool = False,
 ):

@@ -11,7 +11,7 @@ do
     HF_ENDPOINT=https://hf-mirror.com accelerate launch \
                                     --config_file ./config/zero2_opt.yaml \
                                     --num_processes 4 --main_process_port 29503 \
-                                    rere.py \
+                                    rl.py \
                         --model_path path_to_model \
                         --train_batch_size 64 \
                         --eval_batch_size 128 \

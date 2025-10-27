@@ -480,6 +480,115 @@ class SidDataset(Dataset):
     def __getitem__(self, idx):
         return self.inputs[idx]
 
+
+class SidSFTDataset(Dataset):
+    def __init__(self, train_file, tokenizer, max_len=2048, sample=-1, test=False, seed=0, category="", K=4, dedup=False):
+        self.data = pd.read_csv(train_file)
+        random.seed(seed)
+        
+        if sample > 0:
+            self.data = self.data.sample(sample, random_state=seed)
+        self.tokenizer = Tokenizer(tokenizer)
+        self.test = test
+        self.max_len = max_len
+        self.category = category
+        self.dedup = dedup
+        self.get_inputs()  
+    
+    def __len__(self):
+        return len(self.data)
+
+    def generate_prompt(self, data_point):
+        return f"""### User Input: 
+{data_point["input"]}
+
+### Response:\n{data_point["output"]}"""
+
+    def get_history(self, row):
+        row['history_item_sid'] = eval(row['history_item_sid'])
+        L = len(row['history_item_sid']) 
+        history = ""
+        history_str = ", ".join(row["history_item_sid"])
+        for i in range(L):
+            if i == 0:
+                history += row['history_item_sid'][i]
+            else:
+                history += ", " + row['history_item_sid'][i]      
+        target_item = str(row['item_sid'])
+        target_item_sid = row["item_sid"]
+        last_history_item_sid = row['history_item_sid'][-1] if row['history_item_sid'] else None
+        return {"input": f"The user has interacted with items {history} in chronological order. Can you predict the next possible item that the user may expect?",
+                "output": target_item + "\n",
+                "history_str": history_str,
+                "dedup": target_item_sid == last_history_item_sid}
+    
+    def pre(self, idx):
+        instruction = """Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request. 
+
+### Instruction:
+Can you predict the next possible item that the user may expect?
+
+"""
+        tokens = self.tokenizer.encode(instruction, bos=True, eos=False)
+        
+        history = self.get_history(self.data.iloc[idx])
+        # print("**********************")
+        # print("history: ", history)
+        target_item = history['output']
+        history['output'] = ''
+        negative_prompt_ids = copy.deepcopy(tokens)
+        
+        prompt = self.generate_prompt(history)
+        # print("prompt: ", prompt)
+
+        tokens = tokens + self.tokenizer.encode(prompt, bos=False, eos=False)
+        # print("tokens: ", tokens)
+        # print("**********************")
+        history["input"] = ""
+        
+        attention_mask = [1] * len(tokens)
+        
+        if self.test:
+            return {
+                "input_ids": tokens,
+                "attention_mask": attention_mask,
+            }    
+        
+        golden_tokens = self.tokenizer.encode(target_item, bos=False, eos=True)
+        input_prompt_len = len(tokens)
+        tokens = tokens + golden_tokens
+        attention_mask = [1] * len(tokens)
+        labels = [-100] * input_prompt_len + tokens[input_prompt_len:]
+        
+        if len(tokens) >= self.max_len:
+            print(len(tokens))
+        
+        return {
+            "input_ids": tokens[-self.max_len:],
+            "attention_mask": attention_mask[-self.max_len:],
+            "labels": labels[-self.max_len:],
+        }
+    
+    def get_inputs(self):
+        inputs = []
+        for i in tqdm(range(len(self.data))):
+            inputs.append(self.pre(i))
+            
+        self.inputs = inputs
+    
+    def get_all(self):
+        temp = []
+        for i in range(len(self.data)):
+            temp.append(self.get_history(self.data.iloc[i]))
+        return temp
+    
+    def get_inputs_list(self):
+        return self.inputs
+
+    def __getitem__(self, idx):
+        return self.inputs[idx]
+
+
 class EvalSidDataset(Dataset):
 
     def __init__(self, train_file, tokenizer, max_len=2048, sample=-1, test = False, seed=0, category="", K=4, dedup=False):

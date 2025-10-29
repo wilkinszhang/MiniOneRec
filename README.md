@@ -216,7 +216,7 @@ This project is developed by the following institutions:
 
 ## Citation <!-- omit in toc -->
 
-If you find our model/code/paper helpful, please consider citing our papers 📝 and staring us ⭐️！
+If you find our code/paper/model helpful, please consider citing our papers 📝 and staring us ⭐️！
 
 ```bib
 @misc{MiniOneRec,

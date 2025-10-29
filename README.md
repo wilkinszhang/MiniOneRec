@@ -105,7 +105,7 @@ This project is developed by the following institutions:
 
 - <img src="assets/lds.png" width="28px"> [LDS](https://data-science.ustc.edu.cn/_upload/tpl/15/04/5380/template5380/index.html)
 - <img src="assets/alphalab.jpg" width="28px"> [AlphaLab](https://alphalab-ustc.github.io/index.html)
-- - <img src="assets/next.jpg" width="28px"> [NExT](https://www.nextcenter.org/)
+- <img src="assets/next.jpg" width="28px"> [NExT](https://www.nextcenter.org/)
  
 ---
 

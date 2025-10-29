@@ -10,7 +10,7 @@ for category in "Industrial_and_Scientific"; do
     torchrun --nproc_per_node 8 \
             train.py \
             --base_model your_model_path \
-            --batch_size 1024\
+            --batch_size 1024 \
             --micro_batch_size 16 \
             --train_file ${train_file} \
             --eval_file ${eval_file} \

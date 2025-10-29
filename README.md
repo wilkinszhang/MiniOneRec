@@ -66,6 +66,7 @@ MiniOneRec is the first fully open-source **generative recommendation** framewor
 ## 🚀 Quickstart
 
 Use the pre-trained Industrial/Office SIDs we provide for a quick start!
+Reproduction can be achieved with just 4–8 A100/H100 GPUs.
 
 ### 1. Create an isolated Python environment
 
@@ -97,6 +98,108 @@ bash rl.sh
 ```bash
 bash evaluate.sh
 ```
+
+---
+
+## Full Pipeline Walk-through
+
+### 0. Prerequisites
+- GPUs: <e.g., 4–8 × A100/H100 80 GB or comparable>
+- Python: 3.9
+
+### 1. Environment Setup
+```
+# 1.1 Clone the repo
+git clone https://github.com/<your_org>/MiniOneRec.git
+cd MiniOneRec
+
+# 1.2 Create and activate a conda env
+conda create -n MiniOneRec python=3.9 -y
+conda activate MiniOneRec
+
+# 1.3 Install dependencies
+pip install -r requirements.txt
+# (Install the CUDA-specific PyTorch wheel if needed)
+```
+
+### 2. Data Preparation
+
+```
+# 2.1 Download the raw dataset
+# URL: <[dataset link](https://amazon-reviews-2023.github.io/)>
+# Target dir: ……
+
+# 2.2 Filter and preprocess
+bash data/amazon18_data_process.sh \
+     --dataset  your_dataset_type e.g. Industrial  \
+     --user_k 5 \
+     --item_k 5 \
+     --st_year 2017 \
+     --st_month 10 \
+     --ed_year 2018 \
+     --ed_month 11 \
+     --output_path ./data/Amazon18
+
+# 2.3 Encode item text to embeddings
+bash rq/amazon_text2emb.sh \
+     --dataset your_dataset_type e.g. Industrial \
+     --root your_processed_dataset_path \
+     --plm_name qwen \
+     --plm_checkpoint your_emb_model_path
+```
+
+### 3. SID Construction (RQ-VAE)
+
+```
+# 3.1 Train RQ-VAE on the embeddings
+bash rq/main.sh \
+      --data_path xxx/data/Industrial_and_Scientific/Industrial_and_Scientific.emb-qwen-td.npy \
+      --ckpt_dir ./output/Industrial_and_Scientific \
+      --lr 1e-3 \
+      --epochs 10000 \
+      --batch_size 20480
+
+# 3.2 Convert dataset format
+python convert_dataset.py \
+     --dataset_name Industrial_and_Scientific \
+     --data_dir /path/to/Industrial_and_Scientific \
+     --output_dir /path/to/ourput_dir \
+
+```
+
+### 4. SFT
+
+```
+bash sft.sh \
+     --base_model your_model_path \
+     --output_dir your_ourput_dir \
+     --sid_index_path your_.index.json_path \
+     --item_meta_path your_.item.json_path
+```
+
+### 5. Recommendation-Oriented RL
+
+```
+bash rl.sh \
+     --model_path your_model_path \
+     --output_dir output_dir \
+```
+
+### 6. Offline Evaluation
+
+```
+bash evaluate.sh \
+     --exp_name your_model_path 
+```
+
+---
+
+## 🔮 Upcoming Features
+
+We are actively extending MiniOneRec’s capabilities. The following enhancements are already on our roadmap:
+* ⏱️ **More SID Construction Algorithms**: forthcoming support for R-VQ, RQ-Kmeans, and RQ-VAE-v2 (PLUM).
+* ⚙️ **MiniOneRec-Think**: a module that seamlessly integrates dialogue, reasoning, and personalized recommendation, providing an all-in-one solution for complex interactive scenarios.
+* 🔍 **Broader Dataset Support**: additional popular public datasets, including Yelp, to further validate the generality of our algorithms.
 
 ---
 
@@ -140,3 +243,9 @@ If you find our model/code/paper helpful, please consider citing our papers 📝
 }
 
 ```
+
+---
+
+<div align="center">
+We welcome contributions from the community! 🤝
+</div>

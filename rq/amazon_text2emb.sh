@@ -1,4 +1,4 @@
-python amazon_text_emb_qwen.py \
+python amazon_text_emb.py \
       --dataset Office \
       --root xx \
       --plm_name qwen \

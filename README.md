@@ -9,7 +9,7 @@ Scaling Generative Recommendation**
 ![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)
 ![License](https://img.shields.io/badge/License-Apache--2.0-green.svg)
 
-<a href="https://arxiv.org/abs/2510.24431">📄 Technical Report</a>
+<a href="https://arxiv.org/abs/2510.24431">📄 Technical Report</a> | <a href="https://huggingface.co/kkknight/MiniOneRec">🤗 Model ckpt</a> 
 </div>
 
 MiniOneRec is the first fully open-source **generative recommendation** framework, which provides an end-to-end workflow spanning **SID construction**, **supervised fine-tuning (SFT)**, and recommendation-oriented **reinforcement learning (RL)**. 
@@ -85,7 +85,7 @@ pip install -r requirements.txt
 bash sft.sh
 ```
 
-### 4. Recommendation-Oriented Reinforcement Learning (RL)
+### 4. Recommendation-Oriented RL
 
 ```bash
 bash rl.sh

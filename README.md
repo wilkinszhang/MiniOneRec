@@ -17,7 +17,7 @@ Scaling Generative Recommendation**
 
 ---
 
-## Key Techniques 
+## 🛠️ Key Techniques 
 <div align="center">
 <img src="./assets/minionerec_framework.png" width=100% ></img> 
 </div>
@@ -30,7 +30,7 @@ Scaling Generative Recommendation**
 
 ---
 
-## Evaluation
+## 📊 Evaluation
 
 <div align="center">
 <img src="./assets/minionerec_main_result.png" width=100% ></img> 
@@ -198,7 +198,7 @@ bash evaluate.sh \
 
 ---
 
-## 🔮 Upcoming Features
+## 📝 Upcoming Features
 
 We are actively extending MiniOneRec’s capabilities. The following enhancements are already on our roadmap:
 * ⏱️ **More SID Construction Algorithms**: forthcoming support for R-VQ, RQ-Kmeans, and RQ-VAE-v2 (PLUM).
@@ -207,7 +207,7 @@ We are actively extending MiniOneRec’s capabilities. The following enhancement
 
 ---
 
-## Institutions  <!-- omit in toc -->
+## 🏫 Institutions  <!-- omit in toc -->
 
 This project is developed by the following institutions:
 
@@ -218,7 +218,7 @@ This project is developed by the following institutions:
 ---
 
 
-## Citation <!-- omit in toc -->
+## 🔖 Citation <!-- omit in toc -->
 
 If you find our code/paper/model helpful, please consider citing our papers 📝 and staring us ⭐️！
 

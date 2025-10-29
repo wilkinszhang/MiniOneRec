@@ -63,7 +63,9 @@ MiniOneRec is the first fully open-source **generative recommendation** framewor
 
 ## 🚀 Quickstart
 
-### 1. Create a virtual environment
+Use the pre-trained Industrial/Office SIDs we provide for a quick start!
+
+### 1. Create an isolated Python environment.
 
 ```bash
 conda create -n MiniOneRec python=3.9 -y
@@ -82,7 +84,7 @@ pip install -r requirements.txt
 bash sft.sh
 ```
 
-### 4. RL.
+### 4. Recommendation-Oriented Reinforcement Learning (RL)
 
 ```bash
 bash rl.sh

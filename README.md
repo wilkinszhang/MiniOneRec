@@ -133,7 +133,7 @@ pip install -r requirements.txt
 - **2.2 Filter and preprocess**
 ```
 bash data/amazon18_data_process.sh \
-     --dataset  your_dataset_type e.g. Industrial  \
+     --dataset  your_dataset_type \ # e.g. Industrial
      --user_k 5 \
      --item_k 5 \
      --st_year 2017 \
@@ -145,7 +145,7 @@ bash data/amazon18_data_process.sh \
 - **2.3 Encode item text to embeddings**
 ```
 bash rq/amazon_text2emb.sh \
-     --dataset your_dataset_type e.g. Industrial \
+     --dataset your_dataset_type \ # e.g., Industrial 
      --root your_processed_dataset_path \
      --plm_name qwen \
      --plm_checkpoint your_emb_model_path

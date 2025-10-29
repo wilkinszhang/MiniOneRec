@@ -31,7 +31,7 @@ MiniOneRec is the first fully open-source **generative recommendation** framewor
 ## Evaluation
 
 <div align="center">
-<img src="./assets/minionerec_main_result.png.png" width=100% ></img> 
+<img src="./assets/minionerec_main_result.png" width=100% ></img> 
 </div>
 
 ---

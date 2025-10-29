@@ -1,6 +1,6 @@
 # Industrial_and_Scientific
 # Office_Products
-for category in "Office_Products"
+for category in "Industrial_and_Scientific"
 do
     # your model path
     exp_name="xxx"

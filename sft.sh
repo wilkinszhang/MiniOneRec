@@ -9,12 +9,12 @@ for category in "Industrial_and_Scientific"; do
     
     torchrun --nproc_per_node 8 \
             train.py \
-            --base_model /home/huangyanwen.hyw/LLM_models/qwen2.5-1.5b-Instruct \
+            --base_model your_model_path \
             --batch_size 1024\
             --micro_batch_size 16 \
             --train_file ${train_file} \
             --eval_file ${eval_file} \
-            --output_dir output_dir/1020_Industrial_sft_1.5b \
+            --output_dir output_dir/xxx \
             --wandb_project wandb_proj \
             --wandb_run_name wandb_name \
             --category ${category} \

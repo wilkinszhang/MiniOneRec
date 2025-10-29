@@ -65,20 +65,20 @@ MiniOneRec is the first fully open-source **generative recommendation** framewor
 
 Use the pre-trained Industrial/Office SIDs we provide for a quick start!
 
-### 1. Create an isolated Python environment.
+### 1. Create an isolated Python environment
 
 ```bash
 conda create -n MiniOneRec python=3.9 -y
 conda activate MiniOneRec
 ```
 
-### 2. Install required packages.
+### 2. Install required packages
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. SFT.
+### 3. SFT
 
 ```bash
 bash sft.sh
@@ -90,7 +90,7 @@ bash sft.sh
 bash rl.sh
 ```
 
-### 5. Run the evaluation bash.
+### 5. Run the evaluation bash
 
 ```bash
 bash evaluate.sh

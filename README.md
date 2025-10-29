@@ -182,7 +182,7 @@ bash sft.sh \
 ```
 
 ### 5. Recommendation-Oriented RL
-
+> (Optional) For production-scale datasets, considering the cost of reinforcement learning and diminishing marginal returns, you can perform the RL stage using only a relatively small subset on the order of tens of thousands of samples.
 ```
 bash rl.sh \
      --model_path your_model_path \

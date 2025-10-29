@@ -8,6 +8,7 @@ Scaling Generative Recommendation**
 
 ![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)
 ![License](https://img.shields.io/badge/License-Apache--2.0-green.svg)
+
 <a href="https://arxiv.org/abs/2510.24431">📄 Technical Report</a>
 </div>
 

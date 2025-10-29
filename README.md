@@ -108,28 +108,27 @@ bash evaluate.sh
 - Python: 3.9
 
 ### 1. Environment Setup
+- **1.1 Clone the repo**
 ```
-# 1.1 Clone the repo
 git clone https://github.com/<your_org>/MiniOneRec.git
 cd MiniOneRec
-
-# 1.2 Create and activate a conda env
+```
+- **1.2 Create and activate a conda env**
+```
 conda create -n MiniOneRec python=3.9 -y
 conda activate MiniOneRec
-
-# 1.3 Install dependencies
+```
+- **1.3 Install dependencies**
+```
 pip install -r requirements.txt
-# (Install the CUDA-specific PyTorch wheel if needed)
 ```
 
 ### 2. Data Preparation
 
+- **2.1 Download the raw dataset**  
+  Get it from the official page: [Amazon Reviews 2023](https://amazon-reviews-2023.github.io/)
+- **2.2 Filter and preprocess**
 ```
-# 2.1 Download the raw dataset
-# URL: <[dataset link](https://amazon-reviews-2023.github.io/)>
-# Target dir: ……
-
-# 2.2 Filter and preprocess
 bash data/amazon18_data_process.sh \
      --dataset  your_dataset_type e.g. Industrial  \
      --user_k 5 \
@@ -139,8 +138,9 @@ bash data/amazon18_data_process.sh \
      --ed_year 2018 \
      --ed_month 11 \
      --output_path ./data/Amazon18
-
-# 2.3 Encode item text to embeddings
+```
+- **2.3 Encode item text to embeddings**
+```
 bash rq/amazon_text2emb.sh \
      --dataset your_dataset_type e.g. Industrial \
      --root your_processed_dataset_path \
@@ -149,17 +149,18 @@ bash rq/amazon_text2emb.sh \
 ```
 
 ### 3. SID Construction (RQ-VAE)
-
+- **3.1 Train RQ-VAE on the embeddings**
 ```
-# 3.1 Train RQ-VAE on the embeddings
+
 bash rq/main.sh \
       --data_path xxx/data/Industrial_and_Scientific/Industrial_and_Scientific.emb-qwen-td.npy \
       --ckpt_dir ./output/Industrial_and_Scientific \
       --lr 1e-3 \
       --epochs 10000 \
       --batch_size 20480
-
-# 3.2 Convert dataset format
+```
+- **3.2 Convert dataset format**
+```
 python convert_dataset.py \
      --dataset_name Industrial_and_Scientific \
      --data_dir /path/to/Industrial_and_Scientific \

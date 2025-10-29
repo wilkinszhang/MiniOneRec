@@ -126,7 +126,10 @@ pip install -r requirements.txt
 ### 2. Data Preparation
 
 - **2.1 Download the raw dataset**  
-  Get it from the official page: [Amazon Reviews 2023](https://amazon-reviews-2023.github.io/)
+  Get it from the official page:
+  [Amazon Reviews 2023](https://amazon-reviews-2023.github.io/), 
+  [Amazon Reviews 2018](https://cseweb.ucsd.edu/~jmcauley/datasets/amazon_v2/), 
+  [Amazon Reviews 2014](https://cseweb.ucsd.edu/~jmcauley/datasets/amazon/links.html).
 - **2.2 Filter and preprocess**
 ```
 bash data/amazon18_data_process.sh \

@@ -101,7 +101,7 @@ bash evaluate.sh
 
 ---
 
-## Full Pipeline Walk-through
+## 📜 Full Pipeline Walk-through
 
 ### 0. Prerequisites
 - GPUs: <e.g., 4–8 × A100/H100 80 GB or comparable>

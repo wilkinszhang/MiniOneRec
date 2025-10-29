@@ -20,6 +20,6 @@ for category in "Industrial_and_Scientific"; do
             --category ${category} \
             --train_from_scratch False \
             --seed 42 \
-            --sid_index_path /home/huangyanwen.hyw/code_linlin/ReRe-main/LCRec_data/Industrial_and_Scientific/Industrial_and_Scientific.index.json \
-            --item_meta_path /home/huangyanwen.hyw/code_linlin/ReRe-main/LCRec_data/Industrial_and_Scientific/Industrial_and_Scientific.item.json
+            --sid_index_path xxx/Industrial_and_Scientific/Industrial_and_Scientific.index.json \
+            --item_meta_path xxx/Industrial_and_Scientific/Industrial_and_Scientific.item.json
 done

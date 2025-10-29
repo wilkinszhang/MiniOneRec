@@ -33,15 +33,24 @@ MiniOneRec is the first fully open-source **generative recommendation** framewor
 
 | File / Directory          | Description                                                                                                   |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `sft.sh`                  | Shell script that launches the Supervised Fine-Tuning (SFT) stage                                             |
-| `sft.py`                  | Python implementation of the SFT training loop                                                                |
-| `rl.sh`                   | Shell script that launches the Reinforcement Learning (RL) stage                                      |
-| `rl.py`                   | Python implementation of the RL training loop                                                         |
-| `minionerec_trainer.py`   | **MiniOneRec trainer** – GRPO trainer tailored for generative recommendation                                 |
-| `configs/`                | YAML configuration files (datasets, backbone, hyper-parameters)                                              |
-| `evaluate.sh`     | One-click offline top-K evaluation script                                                                    |
-| `evaluate.py`     | Evaluation code that computes HR@K, NDCG@K, etc.                                                              |
-| `requirements.txt`        | Python dependency list                                                                                        |
+| `sft.sh`                  | Shell script to start the Supervised Fine-Tuning (SFT) stage                                           |
+| `sft.py`                  | Python implementation of the SFT training loop                                                            |
+| `rl.sh`                   | Shell script to start the Reinforcement Learning (RL) stage                             |
+| `rl.py`                   | Python implementation of the RL training loop                                              |
+| `minionerec_trainer.py`   | MiniOneRec trainer — GRPO-based trainer specialized for generative recommendation                              |
+| `configs/`                | YAML configuration files                                            |
+| `evaluate.sh`     | One-click offline Top-K evaluation script                                                        |
+| `evaluate.py`     | Evaluation utilities for computing HR@K and NDCG@K.                                                           |
+| `LogitProcessor.py`                | Logit processor for constrained decoding (Python implementation)                                         |
+| `data.py`                | Data pipeline for SFT and RL training                          |
+| `convert_dataset.py`                | Converts an RQ-trained dataset to the SFT-then-RL format                                            |
+| `data/amazon18_data_process.sh`                |    Shell script to filter and preprocess Amazon data into an RQ-ready format                                      |
+| `data/amazon18_data_process.py`                |   Python implementation of the Amazon data preprocessing pipeline                                        |
+| `rq/amazon_text2emb.sh`                |   Shell script to generate item embeddings (title + description) via emb_model for the Amazon dataset                                   |
+| `rq/amazon_text2emb.py`                |   Python implementation of the above embedding generation                                         |
+| `rq/main.sh`                |   Shell script to train RQ-VAE on Amazon item embeddings                        |
+| `rq/main.py`                |   Python implementation of RQ-VAE training                                            |
+| `requirements.txt`        | List of Python dependencies                                                                                |
 
 ---
 

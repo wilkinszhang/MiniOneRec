@@ -17,6 +17,10 @@ Scaling Generative Recommendation**
 
 ---
 
+## 📢 Announcement
+
+---
+
 ## 🛠️ Key Techniques 
 <div align="center">
 <img src="./assets/minionerec_framework.png" width=100% ></img> 

@@ -522,11 +522,22 @@ class ReReTrainer(Trainer):
                 self.reward_funcs[i] = self.accelerator.prepare_model(reward_func, evaluation_mode=True)
 
         
-        
         with open(self.info_file, 'r') as f:
             info = f.readlines()
-            info = ["\"" + _[:-len(_.split('\t')[-1])].strip() + "\"\n" for _ in info]
-            info = [f'''### Response:\n{_}''' for _ in info]
+            # Parse new format: semantic_id \t item_title \t item_id
+            semantic_ids = [line.split('\t')[0].strip() + "\n" for line in info]
+            item_titles = [line.split('\t')[1].strip() + "\n" for line in info if len(line.split('\t')) >= 2]
+            
+            # Format for tokenization
+            info_semantic = [f'''### Response:\n{_}''' for _ in semantic_ids]
+            info_titles = [f'''### Response:\n{_}''' for _ in item_titles]
+
+            info = info_semantic
+
+        # with open(self.info_file, 'r') as f:
+        #     info = f.readlines()
+        #     info = ["\"" + _[:-len(_.split('\t')[-1])].strip() + "\"\n" for _ in info]
+        #     info = [f'''### Response:\n{_}''' for _ in info]
 
         tokenizer = AutoTokenizer.from_pretrained(self.base_model)
         if self.base_model.lower().find("llama") > -1: 
@@ -590,11 +601,13 @@ class ReReTrainer(Trainer):
     #     sampler = super()._get_train_sampler(*args, **kwargs)
     #     return RepeatRandomSampler(self.train_dataset, self.num_generations, seed=self.args.seed)
     
-    def _get_train_sampler(self) -> Sampler:
+    def _get_train_sampler(self, train_dataset=None) -> Sampler:
         # Returns a sampler that ensures each prompt is repeated across multiple processes. This guarantees that
         # identical prompts are distributed to different GPUs, allowing rewards to be computed and normalized correctly
         # within each prompt group. Using the same seed across processes ensures consistent prompt assignment,
         # preventing discrepancies in group formation.
+        if train_dataset is None:
+            train_dataset = self.train_dataset
         return RepeatRandomSampler(self.train_dataset, self.num_generations, seed=self.args.seed)
 
     def _get_eval_sampler(self, eval_dataset) -> Sampler:

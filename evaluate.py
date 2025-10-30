@@ -6,8 +6,7 @@ import json
 import os
 from transformers import GenerationConfig,  AutoTokenizer, BitsAndBytesConfig, AutoModelForCausalLM, LogitsProcessorList, TemperatureLogitsWarper
 from data import  EvalD3Dataset, EvalSidDataset
-# from LogitProcessor import CFEnhancedLogitsProcessor, CFEnhancedLogitsProcessor2
-from LogitProcessor import CFEnhancedLogitsProcessor, ConstrainedLogitsProcessor
+from LogitProcessor import ConstrainedLogitsProcessor
 from accelerate import Accelerator
 import random
 import bitsandbytes as bnb

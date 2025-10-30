@@ -35,5 +35,7 @@ for category in "Industrial_and_Scientific"; do
                         --beta 1e-3 \
                         --dapo False \
                         --output_dir output_dir \
-                        --wandb_run_name wandb_name
+                        --wandb_run_name wandb_name \
+                        --sid_index_path xxx/data/Amazon/index/Industrial_and_Scientific.index.json \
+                        --item_meta_path xxx/data/Amazon/index/Industrial_and_Scientific.item.json
 done

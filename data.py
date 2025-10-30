@@ -1910,3 +1910,222 @@ Analyze the user's interaction history, provide insights about their preferences
             return self.inputs[idx]
         result = self.pre(idx)
         return result if result is not None else {"input_ids": [], "attention_mask": [], "labels": []}
+
+
+class UserPreference2sidSFTDataset(Dataset):
+    def __init__(self, user_preference_file, index_file, tokenizer, max_len=2048, sample=-1, test=False, seed=0, category="", dedup=False):
+        """
+        SFT dataset that uses user interaction history with preferences to predict next item's semantic ID.
+        Uses interaction history from preference file, predicts the last item in the sequence.
+        
+        Args:
+            user_preference_file: Path to JSON file with user preferences
+            index_file: Path to .index.json file mapping item_id to semantic IDs
+            tokenizer: Tokenizer for encoding text
+            max_len: Maximum sequence length
+            sample: Number of samples to use (-1 for all)
+            test: Whether this is test mode
+            seed: Random seed
+            category: Category name for prompts
+            dedup: Whether to filter duplicate items
+        """
+        random.seed(seed)
+        
+        # Load user preferences - handle both JSON and JSONL formats
+        with open(user_preference_file, 'r') as f:
+            try:
+                preference_data = json.load(f)
+            except json.JSONDecodeError:
+                # Try JSONL format (multiple JSON objects, one per line)
+                f.seek(0)
+                preference_data = []
+                for line in f:
+                    line = line.strip()
+                    if line:
+                        preference_data.append(json.loads(line))
+        
+        # Handle new flat structure: each item is a separate training sample
+        self.training_samples = []
+        
+        for item in preference_data:
+            if item.get('split') == 'train':  # Only process train data
+                user_id = item['user']
+                preference_text = item.get('user_preference', '')
+                context = item.get('context', {})
+                history_items = context.get('history_items', [])
+                target_item = context.get('target_item')
+                
+                # Create interaction history by combining history_items and target_item
+                interaction_history = history_items + ([target_item] if target_item is not None else [])
+                
+                # Each item becomes a separate training sample
+                self.training_samples.append({
+                    'user_id': user_id,
+                    'preference_text': preference_text,
+                    'interaction_history': interaction_history
+                })
+        
+        # Load index mapping
+        with open(index_file, 'r') as f:
+            self.indices = json.load(f)
+        
+        self.tokenizer = Tokenizer(tokenizer)
+        self.test = test
+        self.max_len = max_len
+        self.category = category
+        self.dedup = dedup
+        
+        # Prepare training data from preference file interaction histories
+        self.matched_data = self._prepare_sequence_data()
+        
+        if sample > 0 and sample < len(self.matched_data):
+            self.matched_data = random.sample(self.matched_data, sample)
+        
+        self.get_inputs()
+    
+    def _prepare_sequence_data(self):
+        """Prepare sequence prediction data from training samples"""
+        matched_data = []
+        
+        for sample in self.training_samples:
+            interaction_history = sample['interaction_history']
+            
+            # Skip samples without sufficient interaction history (need at least 2 items)
+            if not interaction_history or len(interaction_history) < 2:
+                continue
+            
+            # Use all items except the last one as input history
+            # Use the last item as the target to predict
+            input_history = interaction_history[:-1]  # All but last item
+            target_item = interaction_history[-1]     # Last item as target
+            
+            row_dict = {
+                'user_id': sample['user_id'],
+                'user_preference': sample['preference_text'],
+                'input_history': input_history,
+                'target_item_id': target_item
+            }
+            
+            matched_data.append(row_dict)
+        
+        return matched_data
+    
+    def __len__(self):
+        return len(self.matched_data)
+    
+    def _convert_to_semantic_ids(self, item_ids):
+        """Convert item IDs to semantic ID format using index.json"""
+        semantic_ids = []
+        
+        for item_id in item_ids:
+            item_id_str = str(item_id)
+            if item_id_str in self.indices:
+                sids = self.indices[item_id_str]
+                if len(sids) >= 3:
+                    # Combine the three semantic IDs
+                    combined_sid = sids[0] + sids[1] + sids[2]
+                    semantic_ids.append(combined_sid)
+                else:
+                    semantic_ids.append(item_id_str)
+            else:
+                semantic_ids.append(item_id_str)
+        
+        return semantic_ids
+    
+    def get_input_and_target(self, row_data):
+        """Extract and format user history, preference, and target item"""
+        # Get input history item IDs and convert to semantic IDs
+        input_history_ids = row_data['input_history']
+        history_semantic_ids = self._convert_to_semantic_ids(input_history_ids)
+        
+        # Format semantic IDs as a comma-separated string
+        history_str = ", ".join(history_semantic_ids)
+        
+        # Get user preference
+        user_preference = row_data['user_preference']
+        
+        # Get target item semantic ID
+        target_item_id = row_data['target_item_id']
+        target_semantic_ids = self._convert_to_semantic_ids([target_item_id])
+        target_sid = target_semantic_ids[0] if target_semantic_ids else str(target_item_id)
+        
+        return {
+            "input": f"The user has interacted with items {history_str} in chronological order. Can you analyze the user's preferences?\n### Reasoning:\n{user_preference}\nCan you predict the next possible item that the user may expect?",
+            "output": target_sid,
+            "history_semantic_ids": history_semantic_ids,
+            "user_preference": user_preference,
+            "target_sid": target_sid
+        }
+    
+    def generate_prompt(self, data_point):
+        return f"""### User Input: 
+{data_point["input"]}
+
+### Response:\n{data_point["output"]}"""
+    
+    def pre(self, idx):
+        instruction = """Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request. 
+
+### Instruction:
+Based on the user interaction history and preference analysis, predict the next item's semantic ID.
+
+"""
+        tokens = self.tokenizer.encode(instruction, bos=True, eos=False)
+        
+        row_data = self.matched_data[idx]
+        input_and_target = self.get_input_and_target(row_data)
+        
+        # Skip empty histories or missing targets
+        if not input_and_target['history_semantic_ids'] or not input_and_target['target_sid']:
+            return None
+        
+        target_output = input_and_target['output']
+        input_and_target['output'] = ''
+        
+        prompt = self.generate_prompt(input_and_target)
+        tokens = tokens + self.tokenizer.encode(prompt, bos=False, eos=False)
+        attention_mask = [1] * len(tokens)
+        
+        if self.test:
+            return {
+                "input_ids": tokens,
+                "attention_mask": attention_mask,
+            }
+        
+        golden_tokens = self.tokenizer.encode(target_output + '\n', bos=False, eos=True)
+        input_prompt_len = len(tokens)
+        tokens = tokens + golden_tokens
+        attention_mask = [1] * len(tokens)
+        labels = [-100] * input_prompt_len + tokens[input_prompt_len:]
+        
+        if len(tokens) >= self.max_len:
+            print(f"Sequence length {len(tokens)} exceeds max_len {self.max_len}")
+        
+        return {
+            "input_ids": tokens[-self.max_len:],
+            "attention_mask": attention_mask[-self.max_len:],
+            "labels": labels[-self.max_len:],
+        }
+    
+    def get_inputs(self):
+        inputs = []
+        for i in tqdm(range(len(self.matched_data))):
+            result = self.pre(i)
+            if result is not None:  # Skip None results from empty histories or missing targets
+                inputs.append(result)
+        self.inputs = inputs
+    
+    def get_all(self):
+        temp = []
+        for i in range(len(self.matched_data)):
+            temp.append(self.get_input_and_target(self.matched_data[i]))
+        return temp
+    
+    def get_inputs_list(self):
+        return self.inputs if hasattr(self, 'inputs') else []
+
+    def __getitem__(self, idx):
+        if hasattr(self, 'inputs'):
+            return self.inputs[idx]
+        result = self.pre(idx)
+        return result if result is not None else {"input_ids": [], "attention_mask": [], "labels": []}

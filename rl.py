@@ -15,6 +15,8 @@ import math
 import json
 from sklearn.metrics import ndcg_score
 
+os.environ['WANDB_MODE'] = 'disabled'
+
 def set_seed(seed):
     random.seed(seed)
     np.random.seed(seed)
@@ -60,6 +62,8 @@ def train(
     sample_train: bool = False,
     ada_path: str = "",
     cf_path: str = "",
+    sid_index_path: str = "",
+    item_meta_path: str = "",
     dapo: bool = False,
     gspo: bool = False,
 ):
@@ -107,9 +111,24 @@ def train(
     eval_dataset = eval_dataset.shuffle(seed=seed)
     
 
-    prompt2history = {**train_data.prompt2history, **eval_data.prompt2history}
-    history2target = {**train_data.history2target, **eval_data.history2target}
+    # prompt2history = {**train_data.prompt2history, **eval_data.prompt2history}
+    # history2target = {**train_data.history2target, **eval_data.history2target}
 
+    prompt2history = {}
+    history2target = {}
+    
+    # Collect prompt2history and history2target from all train datasets
+    for dataset in train_datasets:
+        if hasattr(dataset, 'prompt2history'):
+            prompt2history.update(dataset.prompt2history)
+        if hasattr(dataset, 'history2target'):
+            history2target.update(dataset.history2target)
+    
+    # Add eval_data mappings
+    if hasattr(eval_data, 'prompt2history'):
+        prompt2history.update(eval_data.prompt2history)
+    if hasattr(eval_data, 'history2target'):
+        history2target.update(eval_data.history2target)
 
     print("train_dataset: ", train_dataset)
     print("eval_dataset: ", eval_dataset)

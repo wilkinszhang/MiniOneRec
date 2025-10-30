@@ -71,7 +71,7 @@ Reproduction can be achieved with just 4–8 A100/H100 GPUs.
 ### 1. Create an isolated Python environment
 
 ```bash
-conda create -n MiniOneRec python=3.9 -y
+conda create -n MiniOneRec python=3.11 -y
 conda activate MiniOneRec
 ```
 
@@ -115,7 +115,7 @@ cd MiniOneRec
 ```
 - **1.2 Create and activate a conda env**
 ```
-conda create -n MiniOneRec python=3.9 -y
+conda create -n MiniOneRec python=3.11 -y
 conda activate MiniOneRec
 ```
 - **1.3 Install dependencies**

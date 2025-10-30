@@ -217,6 +217,14 @@ This project is developed by the following institutions:
  
 ---
 
+## 🙏 Acknowledgements
+
+This repository reuses or adapts portions of code from the following open-source projects. We gratefully acknowledge their authors and contributors:
+
+- [ReRe](https://github.com/sober-clever/ReRe)
+- [LC-Rec](https://github.com/zhengbw0324/LC-Rec)
+
+---
 
 ## 🔖 Citation <!-- omit in toc -->
 

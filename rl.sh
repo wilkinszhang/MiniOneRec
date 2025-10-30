@@ -2,8 +2,7 @@
 
 export NCCL_IB_DISABLE=1        # 完全禁用 IB/RoCE
 
-for category in "Industrial_and_Scientific"
-do
+for category in "Industrial_and_Scientific"; do
     train_file=$(ls -f ./data/Amazon/train/${category}*.csv)
     eval_file=$(ls -f ./data/Amazon/valid/${category}*11.csv)
     info_file=$(ls -f ./data/Amazon/info/${category}*.txt)
@@ -22,7 +21,7 @@ do
                         --info_file ${info_file} \
                         --category ${category} \
                         --sample_train False \
-                        --eval_step 0.5 \
+                        --eval_step 0.0999 \
                         --reward_type ranking \
                         --num_generations 16 \
                         --mask_all_zero False \
@@ -37,4 +36,6 @@ do
                         --dapo False \
                         --output_dir output_dir \
                         --wandb_run_name wandb_name \
+                        --sid_index_path xxx/data/Amazon/index/Industrial_and_Scientific.index.json \
+                        --item_meta_path xxx/data/Amazon/index/Industrial_and_Scientific.item.json
 done

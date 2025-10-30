@@ -3,7 +3,7 @@ from trl import GRPOConfig, GRPOTrainer
 import random
 import numpy as np
 import torch
-from data import D3Dataset, SidDataset, RLTitle2SidDataset, RLSeqTitle2SidDataset, RLSid2TitleDataset, RLSidhis2TitleDataset, RLTitle2Sid_2LayerDataset, RLTitle2Sid_1LayerDataset
+from data import D3Dataset, SidDataset, RLTitle2SidDataset, RLSeqTitle2SidDataset, RLSid2TitleDataset, RLSidhis2TitleDataset
 from torch.utils.data import ConcatDataset
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import os
@@ -14,6 +14,8 @@ import pickle
 import math
 import json
 from sklearn.metrics import ndcg_score
+
+os.environ['WANDB_MODE'] = 'disabled'
 
 def set_seed(seed):
     random.seed(seed)
@@ -60,6 +62,8 @@ def train(
     sample_train: bool = False,
     ada_path: str = "",
     cf_path: str = "",
+    sid_index_path: str = "",
+    item_meta_path: str = "",
     dapo: bool = False,
     gspo: bool = False,
 ):
@@ -83,10 +87,10 @@ def train(
     # train_datasets.append(train_data)
     train_data1 = SidDataset(train_file, category=category_dict[category], sample=sample)
     train_datasets.append(train_data1)
-    # train_data2 = RLTitle2SidDataset(item_file=item_meta_path, index_file=sid_index_path, category=category_dict[category], sample=sample)
-    # train_datasets.append(train_data2)
-    # train_data3 = RLSeqTitle2SidDataset(train_file, category=category_dict[category], sample=10000)
-    # train_datasets.append(train_data3)
+    train_data2 = RLTitle2SidDataset(item_file=item_meta_path, index_file=sid_index_path, category=category_dict[category], sample=sample)
+    train_datasets.append(train_data2)
+    train_data3 = RLSeqTitle2SidDataset(train_file, category=category_dict[category], sample=10000)
+    train_datasets.append(train_data3)
     # train_data4 = RLSid2TitleDataset(item_file=item_meta_path, index_file=sid_index_path, category=category_dict[category], sample=sample)
     # train_datasets.append(train_data4)
     # train_data5 = RLSidhis2TitleDataset(train_file, item_file=item_meta_path, index_file=sid_index_path, category=category_dict[category], sample=sample)
@@ -107,9 +111,24 @@ def train(
     eval_dataset = eval_dataset.shuffle(seed=seed)
     
 
-    prompt2history = {**train_data.prompt2history, **eval_data.prompt2history}
-    history2target = {**train_data.history2target, **eval_data.history2target}
+    # prompt2history = {**train_data.prompt2history, **eval_data.prompt2history}
+    # history2target = {**train_data.history2target, **eval_data.history2target}
 
+    prompt2history = {}
+    history2target = {}
+    
+    # Collect prompt2history and history2target from all train datasets
+    for dataset in train_datasets:
+        if hasattr(dataset, 'prompt2history'):
+            prompt2history.update(dataset.prompt2history)
+        if hasattr(dataset, 'history2target'):
+            history2target.update(dataset.history2target)
+    
+    # Add eval_data mappings
+    if hasattr(eval_data, 'prompt2history'):
+        prompt2history.update(eval_data.prompt2history)
+    if hasattr(eval_data, 'history2target'):
+        history2target.update(eval_data.history2target)
 
     print("train_dataset: ", train_dataset)
     print("eval_dataset: ", eval_dataset)

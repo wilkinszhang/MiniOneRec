@@ -8,7 +8,7 @@ for category in "Industrial_and_Scientific"; do
     echo ${train_file} ${eval_file} ${info_file} ${test_file}
     
     torchrun --nproc_per_node 8 \
-            train.py \
+            sft.py \
             --base_model your_model_path \
             --batch_size 1024 \
             --micro_batch_size 16 \

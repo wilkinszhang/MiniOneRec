@@ -6,7 +6,7 @@
 **An Open-Source Framework for
 Scaling Generative Recommendation**
 
-![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)
+![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
 ![License](https://img.shields.io/badge/License-Apache--2.0-green.svg)
 <a href="https://arxiv.org/abs/2510.24431"><img src="https://img.shields.io/static/v1?label=arXiv&message=Paper&color=red"></a>
 
@@ -14,6 +14,10 @@ Scaling Generative Recommendation**
 </div>
 
 **MiniOneRec** is the first fully open-source **generative recommendation** framework, which provides an end-to-end workflow spanning **SID construction**, **supervised fine-tuning (SFT)**, and recommendation-oriented **reinforcement learning (RL)**. 
+
+---
+
+## 📢 Announcement
 
 ---
 
@@ -71,7 +75,7 @@ Reproduction can be achieved with just 4–8 A100/H100 GPUs.
 ### 1. Create an isolated Python environment
 
 ```bash
-conda create -n MiniOneRec python=3.9 -y
+conda create -n MiniOneRec python=3.11 -y
 conda activate MiniOneRec
 ```
 
@@ -105,7 +109,7 @@ bash evaluate.sh
 
 ### 0. Prerequisites
 - GPUs: <e.g., 4–8 × A100/H100 80 GB or comparable>
-- Python: 3.9
+- Python: 3.11
 
 ### 1. Environment Setup
 - **1.1 Clone the repo**
@@ -115,7 +119,7 @@ cd MiniOneRec
 ```
 - **1.2 Create and activate a conda env**
 ```
-conda create -n MiniOneRec python=3.9 -y
+conda create -n MiniOneRec python=3.11 -y
 conda activate MiniOneRec
 ```
 - **1.3 Install dependencies**
@@ -201,7 +205,7 @@ bash evaluate.sh \
 ## 📝 Upcoming Features
 
 We are actively extending MiniOneRec’s capabilities. The following enhancements are already on our roadmap:
-* ⏱️ **More SID Construction Algorithms**: forthcoming support for R-VQ, RQ-Kmeans, and RQ-VAE-v2 (PLUM).
+* ⏱️ **More SID Construction Algorithms**: forthcoming support for R-VQ, RQ-Kmeans, RQ-OPQ, and RQ-VAE-v2 (PLUM).
 * ⚙️ **MiniOneRec-Think**: a module that seamlessly integrates dialogue, reasoning, and personalized recommendation, providing an all-in-one solution for complex interactive scenarios.
 * 🔍 **Broader Dataset Support**: additional popular public datasets, including Yelp, to further validate the generality of our algorithms.
 

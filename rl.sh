@@ -2,8 +2,7 @@
 
 export NCCL_IB_DISABLE=1        # 完全禁用 IB/RoCE
 
-for category in "Industrial_and_Scientific"
-do
+for category in "Industrial_and_Scientific"; do
     train_file=$(ls -f ./data/Amazon/train/${category}*.csv)
     eval_file=$(ls -f ./data/Amazon/valid/${category}*11.csv)
     info_file=$(ls -f ./data/Amazon/info/${category}*.txt)
@@ -36,5 +35,5 @@ do
                         --beta 1e-3 \
                         --dapo False \
                         --output_dir output_dir \
-                        --wandb_run_name wandb_name \
+                        --wandb_run_name wandb_name
 done

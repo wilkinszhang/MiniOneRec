@@ -201,7 +201,7 @@ bash evaluate.sh \
 ## 📝 Upcoming Features
 
 We are actively extending MiniOneRec’s capabilities. The following enhancements are already on our roadmap:
-* ⏱️ **More SID Construction Algorithms**: forthcoming support for R-VQ, RQ-Kmeans, and RQ-VAE-v2 (PLUM).
+* ⏱️ **More SID Construction Algorithms**: forthcoming support for R-VQ, RQ-Kmeans, RQ-OPQ, and RQ-VAE-v2 (PLUM).
 * ⚙️ **MiniOneRec-Think**: a module that seamlessly integrates dialogue, reasoning, and personalized recommendation, providing an all-in-one solution for complex interactive scenarios.
 * 🔍 **Broader Dataset Support**: additional popular public datasets, including Yelp, to further validate the generality of our algorithms.
 

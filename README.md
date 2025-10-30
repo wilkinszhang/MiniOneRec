@@ -105,7 +105,7 @@ bash evaluate.sh
 
 ### 0. Prerequisites
 - GPUs: <e.g., 4–8 × A100/H100 80 GB or comparable>
-- Python: 3.9
+- Python: 3.11
 
 ### 1. Environment Setup
 - **1.1 Clone the repo**

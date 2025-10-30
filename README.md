@@ -110,7 +110,7 @@ bash evaluate.sh
 ### 1. Environment Setup
 - **1.1 Clone the repo**
 ```
-[git clone https://github.com/<your_org>/MiniOneRec.git](https://github.com/wilkinszhang/MiniOneRec)
+git clone https://github.com/wilkinszhang/MiniOneRec
 cd MiniOneRec
 ```
 - **1.2 Create and activate a conda env**

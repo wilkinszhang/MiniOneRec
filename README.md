@@ -164,7 +164,6 @@ bash rq/amazon_text2emb.sh \
 ### 3. SID Construction
 - **3.1.1 Train RQ-VAE on the embeddings**
 ```
-
 bash rq/rqvae.sh \
       --data_path xxx/data/Industrial_and_Scientific/Industrial_and_Scientific.emb-qwen-td.npy \
       --ckpt_dir ./output/Industrial_and_Scientific \
@@ -174,10 +173,10 @@ bash rq/rqvae.sh \
 ```
 
 - **3.1.2 Train RQ-Kmeans on the embeddings**
+- 
 ```
 conda install faiss-gpu
-python rqkmeans_faiss.py --dataset Industrial_and_Scientific # Vanilla RQ-KMeans
-python rqkmeans_faiss.py --dataset Industrial_and_Scientific --uniform # Enable layer-wise Sinkhorn balancing
+python rqkmeans_faiss.py --dataset Industrial_and_Scientific # The RQ-Kmeans method based on semantic embeddings has a relatively high collision rate.
 ```
 
 - **3.2 Generate indices**

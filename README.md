@@ -176,8 +176,8 @@ bash rq/rqvae.sh \
 - **3.1.2 Train RQ-Kmeans on the embeddings**
 ```
 conda install faiss-gpu
-python rqkmeans.py --dataset Industrial_and_Scientific # Vanilla RQ-KMeans
-python rqkmeans.py --dataset Industrial_and_Scientific --uniform # Enable layer-wise Sinkhorn balancing
+python rqkmeans_faiss.py --dataset Industrial_and_Scientific # Vanilla RQ-KMeans
+python rqkmeans_faiss.py --dataset Industrial_and_Scientific --uniform # Enable layer-wise Sinkhorn balancing
 ```
 
 - **3.2 Generate indices**

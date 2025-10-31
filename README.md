@@ -161,16 +161,23 @@ bash rq/amazon_text2emb.sh \
      --plm_checkpoint your_emb_model_path
 ```
 
-### 3. SID Construction (RQ-VAE)
-- **3.1 Train RQ-VAE on the embeddings**
+### 3. SID Construction
+- **3.1.1 Train RQ-VAE on the embeddings**
 ```
 
-bash rq/main.sh \
+bash rq/rqvae.sh \
       --data_path xxx/data/Industrial_and_Scientific/Industrial_and_Scientific.emb-qwen-td.npy \
       --ckpt_dir ./output/Industrial_and_Scientific \
       --lr 1e-3 \
       --epochs 10000 \
       --batch_size 20480
+```
+
+- **3.1.2 Train RQ-Kmeans on the embeddings**
+```
+conda install faiss-gpu
+python rqkmeans.py --dataset Industrial_and_Scientific # Vanilla RQ-KMeans
+python rqkmeans.py --dataset Industrial_and_Scientific --uniform # Enable layer-wise Sinkhorn balancing
 ```
 
 - **3.2 Generate indices**

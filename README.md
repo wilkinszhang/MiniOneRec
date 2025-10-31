@@ -19,6 +19,8 @@ Scaling Generative Recommendation**
 
 ## 📢 Announcement
 
+- 2025-10-31 — You can now directly download the implementation **checkpoint (ckpt)** of our MiniOnRec model.
+
 - 2025-10-31 — The SID construction method in **RQ-Kmeans** has been updated.
 
 - 2025-10-31 — Thank you for submitting issues! Based on your feedback, we have released a new implementation. If you encounter any problems while running the code, please update to and consult the **latest version** first.

@@ -3,10 +3,6 @@
 """
 FAISS ResidualQuantizer  +  Sinkhorn-based Uniform Semantic Mapping
 ===================================================================
-1) 训练 FAISS ResidualQuantizer 产生多级 codes
-2) (可选) 逐层对 codes 做 Sinkhorn 均衡以降低冲突率
-   ‒ 每层将样本均匀地映射到 K 个 codeword，上下限差≤1
-3) 保存 MiniOneRec JSON 索引 & (可选) 保存 faiss 量化器
 """
 
 import argparse

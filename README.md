@@ -65,8 +65,10 @@ Scaling Generative Recommendation**
 | `data/amazon18_data_process.py`                |   Python implementation of the Amazon data preprocessing pipeline                                        |
 | `rq/amazon_text2emb.sh`                |   Shell script to generate item embeddings (title + description) via emb_model for the Amazon dataset                                   |
 | `rq/amazon_text2emb.py`                |   Python implementation of the above embedding generation                                         |
-| `rq/main.sh`                |   Shell script to train RQ-VAE on Amazon item embeddings                        |
-| `rq/main.py`                |   Python implementation of RQ-VAE training                                            |
+| `rq/generate_indices.py`                |   Generates the SID file after training an RQ-VAE model                                       |
+| `rq/rqkmeans_faiss.py`                |   FAISS-based implementation of the RQ-KMeans algorithm                                       |
+| `rq/rqvae.sh`                |   Shell script to train RQ-VAE on Amazon item embeddings                        |
+| `rq/rqvae.py`                |   Python implementation of RQ-VAE training                                            |
 | `requirements.txt`        | List of Python dependencies                                                                                |
 
 ---

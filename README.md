@@ -168,7 +168,13 @@ bash rq/main.sh \
       --epochs 10000 \
       --batch_size 20480
 ```
-- **3.2 Convert dataset format**
+
+- **3.2 Generate indices**
+```
+python rq/generate_indices.py
+```
+
+- **3.3 Convert dataset format**
 ```
 python convert_dataset.py \
      --dataset_name Industrial_and_Scientific \

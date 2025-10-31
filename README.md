@@ -19,7 +19,7 @@ Scaling Generative Recommendation**
 
 ## 📢 Announcement
 
-- Thank you for submitting issues! Based on your feedback, we have released a new implementation. If you encounter any problems while running the code, please update to and consult the latest version first.
+- 2025-10-31 — Thank you for submitting issues! Based on your feedback, we have released a new implementation. If you encounter any problems while running the code, please update to and consult the latest version first.
   
 ---
 

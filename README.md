@@ -19,7 +19,7 @@ Scaling Generative Recommendation**
 
 ## 📢 Announcement
 
-- 2025-11-07 - You can now choose to freeze the LLM parameters during the SFT stage and train only the embeddings for the newly added SID vocabulary.
+- 2025-11-07 — You can now choose to freeze the LLM parameters during the SFT stage and train only the embeddings for the newly added SID vocabulary.
 
 - 2025-10-31 — You can now directly download the implementation **checkpoints** of our MiniOnRec model.
 

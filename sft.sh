@@ -21,5 +21,6 @@ for category in "Industrial_and_Scientific"; do
             --train_from_scratch False \
             --seed 42 \
             --sid_index_path ./data/Amazon/index/Industrial_and_Scientific.index.json \
-            --item_meta_path ./data/Amazon/index//Industrial_and_Scientific.item.json
+            --item_meta_path ./data/Amazon/index//Industrial_and_Scientific.item.json \
+            --freeze_LLM False
 done

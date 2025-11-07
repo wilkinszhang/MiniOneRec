@@ -107,6 +107,7 @@ def train(
     cutoff_len: int = 512,
     # llm hyperparams
     group_by_length: bool = False,  # faster, but produces an odd training loss curve
+    freeze_LLM: bool = False,  # freeze LLM parameters, only train new token embeddings
     # wandb params
     wandb_project: str = "",
     wandb_run_name: str = "",

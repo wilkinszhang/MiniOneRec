@@ -804,6 +804,7 @@ Answer the question about item identification.
         tokens = self.tokenizer.encode(instruction, bos=True, eos=False)
         
         data_point = self.data[idx]
+        
         prompt = self.generate_prompt(data_point)
         # print("sidfeature prompt: ", prompt)
         tokens = tokens + self.tokenizer.encode(prompt, bos=False, eos=False)
@@ -816,6 +817,7 @@ Answer the question about item identification.
             }
         
         target = data_point['output'] + '\n'
+        
         golden_tokens = self.tokenizer.encode(target, bos=False, eos=True)
         input_prompt_len = len(tokens)
         tokens = tokens + golden_tokens
